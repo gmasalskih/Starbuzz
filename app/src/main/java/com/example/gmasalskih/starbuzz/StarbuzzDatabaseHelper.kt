@@ -5,8 +5,9 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class StarbuzzDatabaseHelper(context: Context)
-    : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+class StarbuzzDatabaseHelper : SQLiteOpenHelper {
+
+    constructor(context: Context) : super(context, DB_NAME, null, DB_VERSION)
 
     companion object {
 
@@ -23,14 +24,26 @@ class StarbuzzDatabaseHelper(context: Context)
         }
     }
 
-    override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL("CREATE TABLE DRINK (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "NAME TEXT, "
-                + "DESCRIPTION TEXT, "
-                + "IMAGE_RESOURCE_ID INTEGER);")
+    override fun onCreate(db: SQLiteDatabase) {
+        updateMyDatabase(db, 0, 1)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("not implemented")
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        updateMyDatabase(db, 0, 1)
+    }
+
+    private fun updateMyDatabase(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 1) {
+            db.execSQL("CREATE TABLE DRINK (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "NAME TEXT, "
+                    + "DESCRIPTION TEXT, "
+                    + "IMAGE_RESOURCE_ID INTEGER);")
+            drinks.forEach {
+                insertDrink(db, it.name, it.description, it.imageResourceId)
+            }
+        }
+        if(oldVersion < 2){
+            db.execSQL("ALTER TABLE DRINK ADD COLUMN FAVORITE NUMERIC;")
+        }
     }
 }
