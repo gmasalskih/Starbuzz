@@ -14,7 +14,7 @@ class ActivityTopLevel : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_top_level)
         mainMenuView = main_menu
-        mainMenuView.setOnItemClickListener { adapterView, view, position, id ->
+        mainMenuView.setOnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> {
                     startActivity(Intent(this, DrinkCategoryActivity::class.java))
