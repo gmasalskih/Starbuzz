@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 class StarbuzzDatabaseHelper : SQLiteOpenHelper {
 
@@ -15,6 +16,7 @@ class StarbuzzDatabaseHelper : SQLiteOpenHelper {
         const val DB_VERSION = 1
 
         private fun insertDrink(db: SQLiteDatabase, name: String, description: String, resourceId: Int) {
+            Log.d("DB", "insertDrink")
             val drinkValues = ContentValues().apply {
                 put("NAME", name)
                 put("DESCRIPTION", description)
@@ -41,9 +43,11 @@ class StarbuzzDatabaseHelper : SQLiteOpenHelper {
             drinks.forEach {
                 insertDrink(db, it.name, it.description, it.imageResourceId)
             }
+            Log.d("DB", "oldVersion < 1")
         }
         if(oldVersion < 2){
             db.execSQL("ALTER TABLE DRINK ADD COLUMN FAVORITE NUMERIC;")
+            Log.d("DB", "oldVersion < 2")
         }
     }
 }
