@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_drink_category.*
+import java.util.ArrayList
 
 class DrinkCategoryActivity : AppCompatActivity() {
 
@@ -37,20 +38,26 @@ class DrinkCategoryActivity : AppCompatActivity() {
             Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT).show()
         }
 
+//        val str = ArrayList<String>()
+//        if (cursor.moveToFirst()){
+//            do {
+//                str.add(cursor.getString(1))
+//            } while (cursor.moveToNext())
+//        }
+
         coffeeItemsView = coffee_items_view
         coffeeItemsView.adapter = SimpleCursorAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
                 cursor,
                 arrayOf("NAME"),
-                IntArray(android.R.id.text1),
+                intArrayOf(android.R.id.text1),
                 0
         )
-
-//        coffeeItemsView.adapter = ArrayAdapter<Drink>(
+//        coffeeItemsView.adapter = ArrayAdapter<String>(
 //                this,
 //                android.R.layout.simple_list_item_1,
-//                drinks
+//                str
 //        )
         coffeeItemsView.setOnItemClickListener { _, _, position, _ ->
             val intent = Intent(this, DrinkActivity::class.java)
